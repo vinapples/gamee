@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Time Travel Simulator: Learn & Survive</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #111;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+    #game {
+        max-width: 600px;
+        margin: auto;
+        border: 2px solid white;
+        padding: 20px;
+        border-radius: 10px;
+        background: #222;
+    }
+    button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+
+<h1>Time Travel Simulator: Learn & Survive</h1>
+<div id="game">
+    <p>Selamat datang, Penjelajah Waktu! Klik untuk memulai petualangan.</p>
+    <button onclick="startGame()">Mulai!</button>
+</div>
+
+<script>
+let eraIndex = 0;
+let secretClues = [];
+
+const eras = [
+    {
+        name: "Era Dinosaurus (150 juta tahun lalu)",
+        story: "Kamu tiba di zaman Jura. Seekor Brachiosaurus raksasa berjalan di kejauhan.",
+        fact: "Periode Jura dan Trias adalah masa kejayaan dinosaurus, dengan iklim hangat dan banyak tumbuhan pakis raksasa.",
+        choices: [
+            { text: "Amati dinosaurus", success: true, clue: "Dinosaurus herbivora makan daun tinggi." },
+            { text: "Berburu dinosaurus", success: false }
+        ]
+    },
+    {
+        name: "Kerajaan Majapahit (1293 M)",
+        story: "Kamu tiba di pelabuhan kerajaan Majapahit. Udaranya dipenuhi aroma rempah.",
+        fact: "Majapahit terkenal dalam perdagangan rempah dan kapal jong yang besar dan tangguh.",
+        choices: [
+            { text: "Bantu pedagang rempah", success: true, clue: "Kapal jong bisa berlayar jauh." },
+            { text: "Jelajah hutan", success: false }
+        ]
+    },
+    {
+        name: "Revolusi Industri (abad ke-18)",
+        story: "Mesin uap menggerakkan pabrik-pabrik besar. Asap membumbung di langit.",
+        fact: "Mesin uap mengubah industri dan mempengaruhi kehidupan sosial secara besar-besaran.",
+        choices: [
+            { text: "Pelajari mesin uap", success: true, clue: "Mesin uap butuh batu bara." },
+            { text: "Abaikan teknologi", success: false }
+        ]
+    },
+    {
+        name: "Masa Depan (tahun 3024)",
+        story: "Kamu tiba di koloni luar angkasa. Robot dan AI membantu kehidupan manusia.",
+        fact: "Spekulasi masa depan: AI supercerdas dan koloni antarplanet.",
+        choices: [
+            { text: "Gunakan AI untuk misi rahasia", success: "secret" },
+            { text: "Jelajah planet asing", success: false }
+        ]
+    }
+];
+
+function startGame() {
+    eraIndex = 0;
+    secretClues = [];
+    showEra();
+}
+
+function showEra() {
+    let era = eras[eraIndex];
+    let html = `<h2>${era.name}</h2>
+                <p>${era.story}</p>
+                <p><b>Fakta:</b> ${era.fact}</p>`;
+    era.choices.forEach((choice, index) => {
+        html += `<button onclick="chooseOption(${index})">${choice.text}</button>`;
+    });
+    document.getElementById("game").innerHTML = html;
+}
+
+function chooseOption(choiceIndex) {
+    let era = eras[eraIndex];
+    let choice = era.choices[choiceIndex];
+    
+    if (choice.success === true) {
+        secretClues.push(choice.clue || "");
+        document.getElementById("game").innerHTML = `<p>Aksi berhasil!</p><button onclick="nextEra()">Lanjut</button>`;
+    } else if (choice.success === false) {
+        document.getElementById("game").innerHTML = `<p>Aksi gagal... Kamu selamat tapi kehilangan waktu berharga.</p><button onclick="nextEra()">Lanjut</button>`;
+    } else if (choice.success === "secret") {
+        if (secretClues.length >= 3) {
+            document.getElementById("game").innerHTML = `<h2>Selamat!</h2><p>Kamu berhasil memecahkan misi rahasia dengan ingatan dari era sebelumnya!</p>`;
+        } else {
+            document.getElementById("game").innerHTML = `<h2>Gagal</h2><p>Kamu tidak mengingat cukup petunjuk dari masa lalu.</p>`;
+        }
+    }
+}
+
+function nextEra() {
+    eraIndex++;
+    if (eraIndex < eras.length) {
+        showEra();
+    } else {
+        document.getElementById("game").innerHTML = `<h2>Petualangan selesai!</h2><p>Kamu telah mengunjungi semua era.</p><button onclick="startGame()">Main lagi</button>`;
+    }
+}
+</script>
+
+</body>
+</html>
